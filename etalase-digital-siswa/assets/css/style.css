@@ -1,0 +1,313 @@
+/* =====================================================================
+   FILE: assets/css/style.css
+   FUNGSI: seluruh tampilan aplikasi (warna, ukuran, tata letak).
+   Gaya: latar putih kemerahan bertitik, kartu membulat, tombol pil,
+   dan hiasan bentuk merah di pojok. Warna merah -> marun (nuansa Telkom).
+   ===================================================================== */
+
+/* VARIABEL WARNA: ditulis sekali di sini, dipakai di mana-mana lewat var(--nama).
+   Mau ganti warna tema? Cukup ubah di blok ini. */
+:root {
+    --red: #e8242d;           /* merah terang (hiasan) */
+    --crimson: #a81b29;       /* merah tua: tombol & aksen utama */
+    --maroon: #6e1022;        /* marun gelap: hover & judul */
+    --rose: #f8e8ea;          /* merah muda lembut (latar tabel, badge) */
+    --line: #f0dfe1;          /* garis pembatas */
+    --ink: #2a1215;           /* teks utama */
+    --grey: #6f5f62;          /* teks sekunder */
+    --muted: #9b8c8f;         /* teks pudar */
+    --bg: #faf4f4;            /* latar halaman */
+    --white: #ffffff;
+    --shadow: 0 8px 24px rgba(110, 16, 34, .08);   /* bayangan lembut kemerahan */
+}
+
+/* RESET DASAR */
+/* border-box: lebar elemen sudah termasuk padding & border (lebih mudah dihitung) */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+    margin: 0;
+    color: var(--ink);
+    font-family: "DM Sans", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    line-height: 1.5;
+    background-color: var(--bg);
+    /* Background polos tanpa pola bintik. */
+}
+body.modal-open { overflow: hidden; }          /* kunci scroll saat pop up terbuka */
+a { color: var(--crimson); font-weight: 700; text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+h1, h2 { line-height: 1.2; margin: 0; letter-spacing: -.02em; }
+/* Garis biru saat elemen difokus keyboard (Tab) - penting untuk aksesibilitas */
+:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; }
+
+/* ---------- HIASAN LATAR ----------
+   Bentuk-bentuk dekoratif di pojok layar. position: fixed + pointer-events: none
+   artinya selalu di tempat yang sama dan tidak menghalangi klik. */
+body::before, body::after, .auth-wrap::before {
+    content: ""; position: fixed; pointer-events: none; z-index: 0;
+}
+/* Halaman selain login & daftar: sembunyikan hiasan kotak di latar */
+body:not(.auth-page)::before { display: none; }
+/* Halaman login & daftar: hiasan merah tegas */
+body.auth-page::before { display: none; } /* dekorasi login/register disederhanakan */
+/* body.auth-page::before { kotak merah tua, kanan atas */
+    width: 300px; height: 280px; top: -90px; right: -70px;
+    background: var(--crimson); border-radius: 36px; transform: rotate(8deg);
+}
+body.auth-page::after {                        /* kotak merah terang, kiri bawah */
+    width: 320px; height: 300px; bottom: -110px; left: -80px;
+    background: var(--red); border-radius: 36px; transform: rotate(-7deg);
+}
+.auth-wrap::before {                           /* lingkaran garis, kanan bawah */
+    width: 150px; height: 150px; right: 12%; bottom: 12%;
+    border: 2px solid rgba(168, 27, 41, .35); border-radius: 50%;
+}
+
+
+/* Background login dan register dibuat polos sesuai permintaan. */
+body.auth-page::before,
+body.auth-page::after,
+.auth-wrap::before {
+    display: none;
+}
+
+/* ---------- TOMBOL ----------
+   .btn = gaya dasar (bentuk pil); -primary (merah tua), -outline (garis), -danger (hapus), -sm (kecil) */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: .65rem 1.3rem; border-radius: 999px;
+    border: 1.5px solid transparent; font: inherit; font-weight: 700;
+    cursor: pointer; text-decoration: none; background: none; color: var(--ink);
+}
+.btn:hover { text-decoration: none; }
+.btn-sm { padding: .4rem .95rem; font-size: .9rem; }
+.btn-block { width: 100%; margin-top: 1.4rem; padding: .95rem 1.3rem; }
+.btn-primary { background: var(--crimson); color: #fff; box-shadow: 0 6px 16px rgba(168, 27, 41, .3); }
+.btn-primary:hover { background: var(--maroon); }
+.btn-outline { border-color: var(--line); color: var(--ink); background: var(--white); }
+.btn-outline:hover { background: var(--rose); border-color: var(--crimson); color: var(--crimson); }
+.btn-danger { border-color: #e9c3c8; color: var(--crimson); background: var(--white); }
+.btn-danger:hover { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+
+/* ---------- NAVBAR (bagian atas halaman) ---------- */
+.topbar {
+    position: sticky; top: 0; z-index: 20;                 /* tetap di atas saat scroll */
+    background: rgba(255, 255, 255, .92); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+    max-width: 1100px; margin: 0 auto; padding: .7rem 1rem;
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: .7rem; color: var(--ink); font-weight: 800; font-size: 1.1rem; }
+.brand:hover { text-decoration: none; }
+.brand-badge { display: grid; place-items: center; }
+.brand-logo { width: 38px; height: 38px; object-fit: contain; }
+.menu { display: flex; gap: .3rem; flex: 1; flex-wrap: wrap; }
+.menu a { padding: .45rem 1rem; border-radius: 999px; color: var(--grey); font-weight: 700; }
+.menu a:hover { background: var(--rose); color: var(--crimson); text-decoration: none; }
+.menu a.active { background: var(--crimson); color: #fff; }     /* menu halaman yang sedang dibuka */
+.userbox { display: flex; align-items: center; gap: .8rem; margin-left: auto; }
+.userbox form { margin: 0; }
+.username { font-weight: 700; }
+
+/* ---------- ISI HALAMAN: judul, toolbar (cari + tambah), pesan kosong ---------- */
+.page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 1.8rem 1rem 3rem; }
+.page-title { font-size: 1.8rem; font-weight: 800; color: var(--maroon); margin-bottom: 1.1rem; }
+.section-title { font-size: 1.2rem; font-weight: 800; margin: 1.8rem 0 1rem; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+/* Baris judul galeri + kolom cari + tombol tambah */
+.toolbar .section-title { margin: 0; }
+.toolbar-aksi { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
+/* Kolom cari: tombol "Cari" ditempatkan DI DALAM kolom, di ujung kanan (sesuai sketsa) */
+.search { position: relative; width: 320px; max-width: 100%; }
+.search input { width: 100%; padding-right: 5.2rem; }
+.search .btn { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); }
+.empty { background: var(--white); border: 1.5px dashed #e6c9cd; border-radius: 20px; padding: 2.2rem 1rem; text-align: center; color: var(--grey); }
+
+/* ---------- PESAN FLASH: hijau = sukses, merah = gagal ---------- */
+.flash { position: relative; z-index: 1; max-width: 1100px; margin: 1rem auto 0; padding: .75rem 1.1rem; border-radius: 14px; font-weight: 700; }
+.flash-ok { background: #e6f4ea; color: #1e6b34; border: 1px solid #b7dfc2; }
+.flash-err { background: #fdecea; color: #a8171f; border: 1px solid #f3b7b3; }
+.flash-hide { opacity: 0; }
+@media (max-width: 1140px) { .flash { margin-left: 1rem; margin-right: 1rem; } }
+
+/* ---------- GALERI KARYA ----------
+   grid: kolom otomatis, minimal 260px per kartu, menyesuaikan lebar layar */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.4rem; }
+.card {
+    background: var(--white); border: 1px solid var(--line); border-radius: 22px;
+    display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow);
+}
+.card:hover { box-shadow: 0 14px 30px rgba(110, 16, 34, .13); }
+/* all: unset = hapus gaya bawaan <button> supaya terlihat seperti bagian kartu */
+.card-open { all: unset; cursor: pointer; display: block; }
+.card-open:focus-visible { outline: 3px solid #1a73e8; outline-offset: -3px; }
+.thumb { display: block; aspect-ratio: 16 / 10; background: var(--rose); overflow: hidden; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.card-name { display: block; padding: .9rem 1.1rem 0; font-weight: 800; font-size: 1.1rem; }
+.card-open:hover .card-name { color: var(--crimson); }
+.card-body { padding: .2rem 1.1rem 1rem; flex: 1; }
+.card-owner { margin: 0 0 .5rem; font-size: .85rem; color: var(--muted); }
+/* line-clamp: potong deskripsi panjang jadi maksimal 3 baris */
+.card-desc { margin: 0 0 .6rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; color: var(--grey); }
+.card-link { font-size: .9rem; word-break: break-all; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+/* Edit di kiri, Hapus di kanan (sesuai sketsa) */
+.card-actions { display: flex; justify-content: space-between; gap: .5rem; padding: 0 1.1rem 1.1rem; }
+.card-actions form { margin: 0; }
+
+/* ---------- FORM & KOLOM INPUT ---------- */
+label { display: block; margin: 1rem 0 .4rem; font-weight: 700; font-size: .95rem; }
+.hint { font-weight: 400; color: var(--muted); font-size: .85rem; }
+input[type=text], input[type=email], input[type=password], input[type=url], input[type=search], textarea {
+    width: 100%; padding: .85rem 1.1rem; border: 1px solid #e6d3d6; border-radius: 16px;
+    font: inherit; background: var(--white); color: var(--ink);
+}
+input::placeholder, textarea::placeholder { color: var(--muted); }
+input[type=search] { border-radius: 999px; }          /* kolom cari berbentuk pil */
+input[type=text]:focus, input[type=email]:focus, input[type=password]:focus, input[type=url]:focus, input[type=search]:focus, textarea:focus {
+    border-color: var(--crimson); box-shadow: 0 0 0 4px rgba(168, 27, 41, .1); outline: none;
+}
+input[type=file] { width: 100%; font: inherit; }
+textarea { resize: vertical; }
+.alert { background: #fdecea; color: #a8171f; border: 1px solid #f3b7b3; padding: .7rem .9rem; border-radius: 14px; margin: 1rem 0 0; font-weight: 700; }
+
+/* ---------- HALAMAN LOGIN & DAFTAR ---------- */
+.auth-wrap { position: relative; z-index: 1; min-height: 100vh; display: grid; place-items: center; padding: 1.5rem 1rem; }
+.auth-card {
+    width: 100%; max-width: 440px; background: var(--white); border: 1px solid #f2dde0;
+    border-radius: 32px; padding: 2.2rem 2.4rem; box-shadow: 0 20px 50px rgba(110, 16, 34, .12);
+}
+.auth-logo { width: 96px; height: 96px; object-fit: contain; margin: 0 auto .9rem; }
+.auth-card h1 { text-align: center; font-size: 1.75rem; font-weight: 800; color: var(--ink); }
+.auth-sub { text-align: center; color: var(--grey); margin: .4rem 0 .6rem; }
+.auth-foot { text-align: center; margin: 1.3rem 0 0; font-size: .95rem; color: var(--grey); }
+
+/* ---------- TABEL MANAJEMEN USER ---------- */
+.table-wrap { margin-top: 1rem; overflow-x: auto; background: var(--white); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); }
+.table { width: 100%; border-collapse: collapse; min-width: 560px; }
+.table th, .table td { padding: .85rem 1.1rem; text-align: left; border-bottom: 1px solid var(--line); }
+.table th { background: var(--rose); color: var(--maroon); font-weight: 800; }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table tbody tr:hover { background: #fdf8f8; }
+.table form { margin: 0; }
+.muted { color: var(--muted); }
+.badge { display: inline-block; padding: .2rem .75rem; border-radius: 999px; font-size: .85rem; font-weight: 700; background: var(--bg); color: var(--grey); border: 1px solid var(--line); }
+.badge-super_admin { background: var(--crimson); color: #fff; border-color: var(--crimson); }
+.badge-admin { background: var(--rose); color: var(--maroon); border-color: #e9c3c8; }
+
+/* ---------- POP UP (MODAL) ----------
+   Atribut [hidden] membuat modal tersembunyi; JavaScript yang menghilangkan atributnya */
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1rem; }
+.modal[hidden] { display: none; }
+/* latar gelap transparan di belakang pop up */
+.modal-backdrop { position: absolute; inset: 0; background: rgba(42, 10, 16, .55); backdrop-filter: blur(2px); }
+.modal-box { position: relative; background: var(--white); border-radius: 28px; width: 100%; max-width: 640px; max-height: calc(100vh - 2rem); overflow-y: auto; box-shadow: 0 24px 60px rgba(0, 0, 0, .3); }
+.modal-narrow { max-width: 480px; }
+.modal-x { position: absolute; top: .7rem; right: .8rem; z-index: 2; border: 0; background: rgba(255,255,255,.92); border-radius: 50%; width: 2.3rem; height: 2.3rem; font-size: 1.6rem; line-height: 1; cursor: pointer; color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.detail-img { width: 100%; max-height: 360px; object-fit: cover; background: var(--rose); }
+.detail-body { padding: 1.3rem 1.6rem 1.7rem; }
+.detail-body h2 { font-size: 1.5rem; font-weight: 800; color: var(--maroon); }
+.detail-meta { color: var(--muted); margin: .3rem 0 1rem; font-size: .9rem; }
+.detail-desc { white-space: pre-line; margin: 0 0 1.3rem; }
+.form-pad { padding: 1.7rem; }
+.form-pad h2 { color: var(--maroon); font-weight: 800; }
+.form-actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1.5rem; }
+/* Tidak menggunakan animasi maupun transisi sesuai ketentuan proyek. */
+
+/* ---------- RESPONSIF: penyesuaian untuk layar HP (lebar maksimal 600px) ---------- */
+@media (max-width: 600px) {
+    .topbar-inner { gap: .6rem; }
+    .userbox { width: 100%; justify-content: space-between; margin-left: 0; }
+    .toolbar-aksi { width: 100%; }
+    .toolbar-aksi > .btn-primary { width: 100%; }
+    .search { width: 100%; }
+    .auth-card { padding: 1.8rem 1.4rem; border-radius: 26px; }
+    /* hiasan latar dikecilkan supaya tidak menutupi form di layar sempit */
+    body.auth-page::before { width: 180px; height: 170px; }
+    body.auth-page::after { width: 200px; height: 190px; }
+    .auth-wrap::before { display: none; }
+}
+
+/* ---------- FORM TAMBAH / EDIT PROJECT (halaman tersendiri) ---------- */
+/* Kartu putih membulat di tengah halaman, sama gayanya dengan kartu login */
+.form-card {
+    max-width: 560px; margin: 0 auto; background: var(--white); border: 1px solid #f2dde0;
+    border-radius: 28px; padding: 1.8rem 2rem 2rem; box-shadow: 0 20px 50px rgba(110, 16, 34, .1);
+}
+/* Gambar pratinjau di bawah input file */
+.preview { margin-top: .7rem; width: 100%; max-height: 240px; object-fit: cover; border-radius: 16px; border: 1px solid var(--line); background: var(--rose); }
+.preview[hidden] { display: none; }
+@media (max-width: 600px) { .form-card { padding: 1.4rem 1.2rem 1.6rem; border-radius: 22px; } }
+
+/* ===== PENYESUAIAN KATALOG & FORM UNGGAH ===== */
+.topbar-inner { max-width: 1600px; padding: .75rem 1.8rem; }
+.page { max-width: 1280px; padding-top: 1.8rem; }
+.catalog-toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
+    flex-wrap: wrap; background: #fff; border: 1px solid var(--line);
+    border-radius: 26px; padding: 1rem 1.45rem; margin: 0 0 1.25rem;
+}
+.catalog-heading { display: flex; align-items: center; gap: .85rem; }
+.catalog-heading .section-title { margin: 0; font-size: 1.45rem; }
+.catalog-count { background: var(--rose); color: var(--crimson); border-radius: 999px; padding: .22rem .8rem; font-weight: 800; font-size: .86rem; white-space: nowrap; }
+.catalog-toolbar .toolbar-aksi { flex: 1; justify-content: flex-end; }
+.catalog-toolbar .search { width: min(470px, 100%); }
+.catalog-toolbar .search input { min-height: 48px; padding-left: 1.1rem; }
+.catalog-toolbar .search .btn { min-height: 42px; padding-inline: 1.2rem; }
+.catalog-toolbar .add-project { min-height: 46px; white-space: nowrap; }
+.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.35rem; }
+.card { border-radius: 27px; box-shadow: 0 5px 18px rgba(110,16,34,.045); }
+.card-open { width: 100%; text-align: left; }
+.thumb { aspect-ratio: 1.38 / 1; margin: .55rem .55rem 0; border-radius: 20px; }
+.card-name { padding: .85rem .9rem .15rem; font-size: 1.35rem; line-height: 1.25; }
+.card-body { padding: 0 .9rem .9rem; }
+.card-meta { display: flex; gap: 1rem; align-items: center; margin: .35rem 0 .65rem; color: var(--muted); font-size: .9rem; }
+.card-meta span { white-space: nowrap; }
+.card-desc { min-height: 4.5em; line-height: 1.55; margin-bottom: .75rem; }
+.card-link { display: inline-flex; color: var(--crimson); font-size: .92rem; }
+.card-actions { justify-content: flex-start; border-top: 1px dashed var(--line); margin: 0 .9rem; padding: .85rem 0 1rem; }
+.btn-edit { background: #ffc44f; color: #321b08; border-color: #f2b73f; box-shadow: 0 4px 10px rgba(226,164,45,.18); }
+.btn-edit:hover { background: #f4b638; color: #321b08; }
+.btn-delete { background: #f3eeee; color: #5d4b4e; border-color: #e9dfe0; }
+.btn-delete:hover { background: #eadfe0; color: var(--maroon); }
+.add-page { max-width: 900px; padding-top: .35rem; }
+.form-card { max-width: 665px; padding: 2rem 2.1rem 2.1rem; border-radius: 27px; box-shadow: none; }
+.form-card h1 { font-size: 1.8rem; font-weight: 800; margin: .05rem 0 1.65rem; color: var(--ink); }
+.form-card label { margin: 1.1rem 0 .48rem; font-size: .94rem; }
+.form-card input[type=text], .form-card input[type=url], .form-card textarea {
+    border-radius: 16px; padding: .85rem 1rem; border-color: #eadadd;
+}
+.form-card textarea { min-height: 128px; }
+.file-field { border: 1px dashed #eadadd; border-radius: 16px; padding: .65rem .8rem; margin-top: .45rem; }
+.file-field input[type=file] { font-size: .92rem; }
+.form-card .form-actions { margin-top: 1.25rem; }
+.form-card .form-actions .btn-primary { flex: 1; min-height: 49px; }
+.form-card .form-actions .btn-outline { min-height: 49px; }
+.project-form-page .topbar-inner { max-width: 1600px; }
+.project-form-page .brand { margin-right: auto; }
+.project-form-page .menu { display: none; }
+@media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .catalog-toolbar .toolbar-aksi { width: 100%; }
+    .catalog-toolbar .search { flex: 1; }
+}
+@media (max-width: 600px) {
+    .topbar-inner { padding: .65rem 1rem; }
+    .page { padding: 1rem .8rem 2rem; }
+    .catalog-toolbar { padding: 1rem; border-radius: 20px; }
+    .catalog-heading { width: 100%; }
+    .catalog-heading .section-title { font-size: 1.2rem; }
+    .catalog-toolbar .toolbar-aksi { display: grid; grid-template-columns: 1fr; }
+    .catalog-toolbar .search { width: 100%; }
+    .catalog-toolbar .add-project { width: 100%; }
+    .grid { grid-template-columns: 1fr; }
+    .card-name { font-size: 1.2rem; }
+    .add-page { padding-top: .6rem; }
+    .form-card { padding: 1.35rem 1.1rem 1.45rem; }
+    .form-card h1 { font-size: 1.45rem; }
+    .form-card .form-actions { flex-direction: column; }
+    .form-card .form-actions .btn { width: 100%; }
+    .project-form-page .userbox { width: auto; margin-left: auto; }
+}
